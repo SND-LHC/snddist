@@ -1,7 +1,6 @@
 package: FairRoot
-version: "%(short_hash)s"
-tag: "v18.4.2_snd"
-source: https://github.com/SND-LHC/FairRoot
+version: "v18.4.9"
+source: https://github.com/FairRootGroup/FairRoot
 requires:
   - generators
   - simulation
@@ -11,7 +10,6 @@ requires:
   - protobuf
   - FairLogger
   - FairMQ
-  - yaml-cpp
   - "GCC-Toolchain:(?!osx)"
 env:
   VMCWORKDIR: "$FAIRROOT_ROOT/share/fairbase/examples"
@@ -30,7 +28,6 @@ unset SIMPATH
 case $ARCHITECTURE in
   osx*)
     # If we preferred system tools, we need to make sure we can pick them up.
-    [[ ! $YAML_CPP_ROOT ]] && YAML_CPP_ROOT=`brew --prefix yaml-cpp`
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
     [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=`brew --prefix protobuf`
     [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
@@ -41,6 +38,7 @@ case $ARCHITECTURE in
 esac
 
 [[ $BOOST_ROOT ]] && BOOST_NO_SYSTEM_PATHS=ON || BOOST_NO_SYSTEM_PATHS=OFF
+
 cmake $SOURCEDIR                                                                            \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                             \
       ${MACOSX_RPATH:+-DMACOSX_RPATH=${MACOSX_RPATH}}                                       \
@@ -49,8 +47,8 @@ cmake $SOURCEDIR                                                                
       -DROOTSYS=$ROOTSYS                                                                    \
       -DROOT_CONFIG_SEARCHPATH=$ROOT_ROOT/bin                                               \
       -DPythia6_LIBRARY_DIR=$PYTHIA6_ROOT/lib                                               \
-      ${YAML_CPP_ROOT:+-DYAML_CPP_ROOT=$YAML_CPP_ROOT}                                      \
       -DGeant3_DIR=$GEANT3_ROOT                                                             \
+      -DBUILD_MBS=OFF                                                                       \
       -DDISABLE_GO=ON                                                                       \
       -DBUILD_EXAMPLES=ON                                                                   \
       ${GEANT4_ROOT:+-DGeant4_DIR=$GEANT4_ROOT}                                             \
@@ -65,6 +63,7 @@ cmake $SOURCEDIR                                                                
       ${PROTOBUF_ROOT:+-DProtobuf_INCLUDE_DIR=$PROTOBUF_ROOT/include}                       \
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc}              \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                               \
+      -DCMAKE_DISABLE_FIND_PACKAGE_yaml-cpp=ON                                              \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                    \
       -DCMAKE_INSTALL_LIBDIR=lib                                                            \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
@@ -86,30 +85,9 @@ MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0                                                                            \\
-            ${YAML_CPP_REVISION:+yaml-cpp/$YAML_CPP_VERSION-$YAML_CPP_REVISION}                  \\
-            ${FAIRLOGGER_REVISION:+FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION}         \\
-            ${FAIRMQ_REVISION:+FairMQ/$FAIRMQ_VERSION-$FAIRMQ_REVISION}                         \\
-            ${GEANT3_REVISION:+GEANT3/$GEANT3_VERSION-$GEANT3_REVISION}                         \\
-            ${GEANT4_VMC_REVISION:+GEANT4_VMC/$GEANT4_VMC_VERSION-$GEANT4_VMC_REVISION}         \\
-            ${PROTOBUF_REVISION:+protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION}                 \\
-            ${PYTHIA6_REVISION:+pythia6/$PYTHIA6_VERSION-$PYTHIA6_REVISION}                     \\
-            ${PYTHIA_REVISION:+pythia/$PYTHIA_VERSION-$PYTHIA_REVISION}                         \\
-            ${VGM_REVISION:+vgm/$VGM_VERSION-$VGM_REVISION}                                     \\
-            ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}                             \\
-            ROOT/$ROOT_VERSION-$ROOT_REVISION                                                   \\
-            ${ZEROMQ_REVISION:+ZeroMQ/$ZEROMQ_VERSION-$ZEROMQ_REVISION}                         \\
-            ${DDS_REVISION:+DDS/$DDS_VERSION-$DDS_REVISION}                                     \\
-            ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
+alibuild-generate-module --bin --lib > $MODULEFILE
+
+cat >> "$MODULEFILE" <<EoF
 # Our environment
 set FAIRROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 set FAIRROOTPATH \$::env(BASEDIR)/$PKGNAME/\$version
@@ -120,4 +98,5 @@ setenv CONFIG_DIR \$::env(VMCWORKDIR)/common/gconfig
 prepend-path PATH \$FAIRROOT_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$FAIRROOT_ROOT/lib
 prepend-path ROOT_INCLUDE_PATH \$FAIRROOT_ROOT/include
+prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
 EoF

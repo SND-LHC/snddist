@@ -87,7 +87,7 @@ overrides:
       type cmake && verge 3.18.2 `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3`
   FairRoot:
     version: "%(tag_basename)s"
-    tag: "v18.4.2_snd"
+    tag: "v18.4.9"
     prefer_system_check: |
       ls $FAIRROOT_ROOT/ > /dev/null && \
       ls $FAIRROOT_ROOT/lib > /dev/null && \
@@ -95,7 +95,7 @@ overrides:
       grep v18.4.2 $FAIRROOT_ROOT/include/FairVersion.h
   FairMQ:
     version: "%(tag_basename)s"
-    tag: "v1.4.38"
+    tag: "v1.4.55"
     prefer_system_check: |
       ls $FAIRMQ_ROOT/ > /dev/null && \
       ls $FAIRMQ_ROOT/lib > /dev/null && \
@@ -110,7 +110,7 @@ overrides:
       grep 1.9.0 $FAIRLOGGER_ROOT/include/fairlogger/Version.h
   GEANT4:
     version: "%(tag_basename)s"
-    tag: v10.7.2
+    tag: v11.0.3
     source: https://github.com/geant4/geant4.git
     prefer_system_check: |
       ls $GEANT4_ROOT/bin > /dev/null && \
@@ -142,7 +142,7 @@ overrides:
      G4SAIDXSDATA : "`find ${G4INSTALL} $G4DATASEARCHOPT  '*data*G4SAIDDATA*'`"
   GEANT4_VMC:
     version: "%(tag_basename)s"
-    tag: v5-4
+    tag: v6-1-p2
     prefer_system_check: |
       ls $GEANT4_VMC_ROOT/bin > /dev/null && \
       ls $GEANT4_VMC_ROOT/lib/libg4root.so > /dev/null && \
@@ -154,7 +154,7 @@ overrides:
       true
   VMC:
     version: "%(tag_basename)s"
-    tag: v1-1-p1
+    tag: v2-0
     prefer_system_check: |
       ls $VMC_ROOT/include > /dev/null && \
       true
@@ -309,7 +309,7 @@ overrides:
   GEANT3:
     version: "%(tag_basename)s"
     source: https://github.com/vmc-project/geant3
-    tag: v3-9
+    tag: v4-1
     prefer_system_check: |
       ls $GEANT3_ROOT/ > /dev/null && \
       ls $GEANT3_ROOT/include > /dev/null && \

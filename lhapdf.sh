@@ -1,7 +1,7 @@
 package: lhapdf
 version: "%(tag_basename)s%(defaults_upper)s"
-tag: v6.2.3
-source: https://github.com/olantwin/LHAPDF
+tag: lhapdf-6.5.3
+source: https://gitlab.com/hepcedar/lhapdf/
 requires:
  - Python-modules
 build_requires:
