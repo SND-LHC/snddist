@@ -1,20 +1,27 @@
-package: XercesC
+package: xercesc
 version: v3.2.2
 source: https://github.com/apache/xerces-c
 build_requires:
+  - CMake
   - GCC-Toolchain:(?!osx)
-env:
-  XERCESC_INST_DIR: "$XERCESC_ROOT"
-  XERCESCINST: "$XERCESC_ROOT"
-  XERCESCROOT: "$XERCESC_ROOT"
+
+prefer_system: ".*"
+prefer_system_check: |
+  pkg-config --atleast-version=3.2.0 xerces-c 2>&1 && printf "#include \"<xercesc/util/PlatformUtils.hpp>\"\nint main(){}" | c++ -xc - -o /dev/null
+prepend_path:
+  ROOT_INCLUDE_PATH: "$XERCESC_ROOT/include"
+  LD_LIBRARY_PATH: "$XERCESC_ROOT/lib"
 ---
-#!/bin/sh
-cd $SOURCEDIR
-autoreconf -i
-cd - 
-echo "command $SOURCEDIR configure --prefix $INSTALLROOT CFLAGS $CFLAGS CXXFLAGS=$CFLAGS"
-$SOURCEDIR/configure --prefix=$INSTALLROOT CFLAGS="$CFLAGS" CXXFLAGS="$CFLAGS"
-make ${JOBS+-j $JOBS}
+
+cmake $SOURCEDIR                                         \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                \
+      -DBUILD_SHARED_LIBS=ON                             \
+      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}             \
+      -DCMAKE_CXX_STANDARD=${CXXSTD}                     \
+      -Dnetwork:BOOL=OFF                                 \
+      -DCMAKE_INSTALL_LIBDIR=lib
+
+make ${JOBS:+-j $JOBS}
 make install
 
 # Modulefile
@@ -32,11 +39,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv XERCESC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv XERCESCROOT \$::env(XERCESC_ROOT)
-setenv XERCESC_INST_DIR \$::env(XERCESC_ROOT)
-setenv XERCESCINST \$::env(XERCESC_ROOT)
-prepend-path PATH \$::env(XERCESC_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(XERCESC_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(XERCESC_ROOT)/lib")
+set XERCESC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path LD_LIBRARY_PATH \$XERCESC_ROOT/lib
 EoF

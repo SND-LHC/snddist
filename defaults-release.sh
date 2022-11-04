@@ -30,7 +30,7 @@ overrides:
       which gfortran || { echo "gfortran missing"; exit 1; }
       which cc && test -f $(dirname $(which cc))/c++ && printf "#define GCCVER ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__))\n#if (GCCVER < 0x060000 || GCCVER > 0x100000)\n#error \"System's GCC cannot be used: we need GCC 6.X. We are going to compile our own version.\"\n#endif\n" | cc -xc++ - -c -o /dev/null
   XRootD:
-    tag: v5.4.3
+    tag: v5.5.0
     prefer_system_check: |
       ls $XROOTD_ROOT/bin > /dev/null && \
       ls $XROOTD_ROOT/lib > /dev/null && \
@@ -124,7 +124,7 @@ overrides:
     requires:
       - "GCC-Toolchain:(?!osx)"
       - opengl
-      - XercesC
+      - xercesc
     env:
      G4INSTALL : $GEANT4_ROOT
      G4DATASEARCHOPT : "-mindepth 2 -maxdepth 4 -type d -wholename"
@@ -295,14 +295,13 @@ overrides:
       ls $VGM_ROOT/lib/libGeant4GM.a > /dev/null && \
       ls $VGM_ROOT/lib/libRootGM.a > /dev/null && \
       ls $VGM_ROOT/lib/libXmlVGM.a > /dev/null
-  XercesC:
+  xercesc:
     prefer_system_check: |
       ls $XERCESC_ROOT/ > /dev/null && \
       ls $XERCESC_ROOT/bin > /dev/null && \
       ls $XERCESC_ROOT/include > /dev/null && \
       ls $XERCESC_ROOT/include/xercesc/ > /dev/null && \
       ls $XERCESC_ROOT/lib > /dev/null && \
-      ls $XERCESC_ROOT/lib/libxerces-c-3.1.so > /dev/null && \
       ls $XERCESC_ROOT/lib/libxerces-c.a > /dev/null && \
       ls $XERCESC_ROOT/lib/libxerces-c.la > /dev/null && \
       ls $XERCESC_ROOT/lib/libxerces-c.so > /dev/null
