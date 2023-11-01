@@ -104,6 +104,15 @@ mkdir -p "$MODULEDIR"
 alibuild-generate-module --bin --lib > "$MODULEFILE"
 
 cat >> "$MODULEFILE" <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+  global version
+  puts stderr "SND\@LHC Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+}
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "SND\@LHC Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Our environment
+setenv XROOTD_ROOT \$PKG_ROOT
 if { $XROOTD_PYTHON } {
   prepend-path PYTHONPATH \$PKG_ROOT/lib/python/site-packages
   # This is probably redundant, but should not harm.
