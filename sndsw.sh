@@ -16,8 +16,6 @@ requires:
   - alpaca
   - FEDRA
   - XRootD
-build_requires:
-  - googletest
 incremental_recipe: |
   rsync -ar $SOURCEDIR/ $INSTALLROOT/
   make ${JOBS:+-j$JOBS}
