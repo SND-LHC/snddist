@@ -178,7 +178,6 @@ setenv SNDSW_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv FAIRSHIP \$::env(SNDSW_ROOT)
 setenv FAIRSHIP_ROOT \$::env(SNDSW_ROOT)
 setenv SNDSW_HASH $SNDSW_HASH
-setenv XROOTD_ROOT $XROOTD_ROOT
 setenv FAIRSHIP_HASH \$::env(SNDSW_HASH)
 setenv VMCWORKDIR \$::env(SNDSW_ROOT)
 setenv GEOMPATH \$::env(SNDSW_ROOT)/geometry
