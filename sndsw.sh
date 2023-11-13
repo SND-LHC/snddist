@@ -16,6 +16,7 @@ requires:
   - alpaca
   - FEDRA
   - XRootD
+  - GenFit
 incremental_recipe: |
   rsync -ar $SOURCEDIR/ $INSTALLROOT/
   make ${JOBS:+-j$JOBS}
@@ -137,6 +138,7 @@ cmake $SOURCEDIR                                                 \
       -DGEANT4_VMC_INCLUDE_DIR=$GEANT4_VMC_ROOT/include/geant4vmc \
       ${CMAKE_VERBOSE_MAKEFILE:+-DCMAKE_VERBOSE_MAKEFILE=ON}     \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                    \
+      ${GENFIT:+-Dgenfit2_ROOT=$GENFIT} \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 make ${JOBS:+-j$JOBS}
 make test

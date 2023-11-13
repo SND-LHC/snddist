@@ -1,10 +1,11 @@
 package: GenFit
-version: "02-00-02"
-source: https://github.com/GenFit/GenFit
+version: 0a1ed8c
+source: https://github.com/olantwin/GenFit
 requires:
   - ROOT
-#  - RAVE # TODO build with RAVE!
+  - RAVE
   - googletest # should be build dep?
+  - boost
 build-requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"
@@ -14,14 +15,11 @@ prepend_path:
   ROOT_INCLUDE_PATH: "$GENFIT_ROOT/include"
   LD_LIBRARY_PATH: "$GENFIT_ROOT/lib"
 ---
-env
-
 cmake $SOURCEDIR                                                                            \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                             \
       ${MACOSX_RPATH:+-DMACOSX_RPATH=${MACOSX_RPATH}}                                       \
       -DCMAKE_CXX_FLAGS="$CXXFLAGS"                                                         \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}                             \
-      -DROOTSYS=$ROOTSYS                                                                    \
       -DGTEST_ROOT=$GOOGLETEST_ROOT \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                               \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                    \
