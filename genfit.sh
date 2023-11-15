@@ -33,7 +33,7 @@ MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 
-alibuild-generate-module --bin --lib > $MODULEFILE
+alibuild-generate-module --lib > $MODULEFILE
 
 cat >> "$MODULEFILE" <<EoF
 # Our environment
