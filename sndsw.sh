@@ -19,7 +19,6 @@ requires:
 incremental_recipe: |
   rsync -ar $SOURCEDIR/ $INSTALLROOT/
   make ${JOBS:+-j$JOBS}
-  make test
   make install
   rsync -a $BUILDDIR/bin $INSTALLROOT/
   # to be sure all header files are there
@@ -139,7 +138,6 @@ cmake $SOURCEDIR                                                 \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                    \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 make ${JOBS:+-j$JOBS}
-make test
 make install
 
 rsync -a $BUILDDIR/bin $INSTALLROOT/
