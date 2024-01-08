@@ -24,8 +24,8 @@ incremental_recipe: |
   rsync -a $BUILDDIR/bin $INSTALLROOT/
   # to be sure all header files are there
   rsync -a $INSTALLROOT/*/*.h $INSTALLROOT/include
-  rsync -a $INSTALLROOT/genfit/core/include/*.h $INSTALLROOT/include
-  #Get the current git hash
+  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete $BUILDDIR/etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+  #Get the current git hash and update modulefile
   cd $SOURCEDIR
   SNDSW_HASH=$(git rev-parse HEAD)
   sed -i -e "s/SNDSW_HASH .*/SNDSW_HASH $SNDSW_HASH/" "$INSTALLROOT/etc/modulefiles/sndsw"
@@ -93,7 +93,7 @@ SNDSW_HASH=$(git rev-parse HEAD)
 cd $BUILDDIR
 
 # Modulefile
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
+MODULEDIR="$BUILDDIR/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 
@@ -130,3 +130,5 @@ append-path PYTHONPATH  \$::env(XROOTD_ROOT)/local/lib/python3.10/dist-packages
 
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(SNDSW_ROOT)/lib")
 EoF
+
+mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete $BUILDDIR/etc/modulefiles/ $INSTALLROOT/etc/modulefiles
