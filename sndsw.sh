@@ -147,7 +147,6 @@ make install
 rsync -a $BUILDDIR/bin $INSTALLROOT/
 # to be sure all header files are there
 rsync -a $INSTALLROOT/*/*.h $INSTALLROOT/include
-rsync -a $INSTALLROOT/genfit/core/include/*.h $INSTALLROOT/include
 
 #Get the current git hash
 cd $SOURCEDIR
