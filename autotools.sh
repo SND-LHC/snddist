@@ -1,11 +1,11 @@
 package: autotools
 version: "%(tag_basename)s"
-tag: v1.6.3
-source: https://github.com/alisw/autotools
+tag: v1.6.3_snd
+source: https://github.com/SND-LHC/autotools.git
 prefer_system: "(?!slc5|slc6)"
 prefer_system_check: |
   export PATH=$PATH:$(brew --prefix gettext || true)/bin;
-  which autoconf && which m4 && which automake && which makeinfo && which aclocal && which pkg-config && which autopoint && which libtool;
+  which autoconf && which m45 && which automake && which makeinfo && which aclocal && which pkg-config && which autopoint && which libtool; #might be a typo m45->m4
   if [ $? -ne 0 ]; then printf "One or more autotools packages are missing on your system.\n * On a RHEL-compatible system you probably need: autoconf automake texinfo gettext gettext-devel libtool\n * On an Ubuntu-like system you probably need: autoconf automake autopoint texinfo gettext libtool libtool-bin pkg-config\n * On macOS you need: brew install autoconf automake gettext pkg-config"; exit 1; fi
 prepend_path:
   PKG_CONFIG_PATH: $(pkg-config --debug 2>&1 | grep 'Scanning directory' | sed -e "s/.*'\(.*\)'/\1/" | xargs echo | sed -e 's/ /:/g')
@@ -48,10 +48,10 @@ if [ -d help2man* ]; then
 fi
 
 # m4 -- requires: nothing special
-pushd m4*
+pushd m4-1.4.19*
   sed -i '1 i @documentencoding ISO-8859-1' doc/m4.texi
   $USE_AUTORECONF && autoreconf -ivf
-  ./configure --disable-dependency-tracking --prefix $INSTALLROOT
+  ./configure --prefix $INSTALLROOT
   make ${JOBS+-j $JOBS}
   make install
   hash -r
