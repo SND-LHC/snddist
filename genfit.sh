@@ -1,5 +1,5 @@
 package: GenFit
-version: 0a1ed8c
+version: main
 source: https://github.com/olantwin/GenFit
 requires:
   - ROOT
@@ -24,7 +24,8 @@ cmake $SOURCEDIR                                                                
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                               \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                    \
       -DCMAKE_INSTALL_LIBDIR=lib                                                            \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+      -DROOT_DIR="${ROOT_ROOT}"
 
 cmake --build . -- -j$JOBS install
 
