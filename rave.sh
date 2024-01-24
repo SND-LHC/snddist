@@ -1,5 +1,5 @@
 package: RAVE
-version: 0f491f8
+version: 48873e5ec3e531183cbb64dd8bf4b31bbb7c24dd
 source: https://github.com/olantwin/rave
 requires:
   - boost
@@ -26,6 +26,8 @@ make clean
 make -j$JOBS
 
 make install 
+
+mv "$SOURCEDIR"/RaveConfig.cmake "$INSTALLROOT"
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
