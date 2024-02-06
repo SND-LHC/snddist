@@ -25,7 +25,6 @@ incremental_recipe: |
   rsync -a $BUILDDIR/bin $INSTALLROOT/
   # to be sure all header files are there
   rsync -a $INSTALLROOT/*/*.h $INSTALLROOT/include
-  rsync -a $INSTALLROOT/genfit/core/include/*.h $INSTALLROOT/include
   #Get the current git hash
   cd $SOURCEDIR
   SNDSW_HASH=$(git rev-parse HEAD)
@@ -52,6 +51,7 @@ incremental_recipe: |
             ${FAIRROOT_VERSION:+FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION}  \\
             ${MADGRAPH5_VERSION:+madgraph5/$MADGRAPH5_VERSION-$MADGRAPH5_REVISION} \\
             ${ALPACA_VERSION:+alpaca/$ALPACA_VERSION-$ALPACA_REVISION}          \\
+            ${GENFIT_VERSION:+GenFit/$GENFIT_VERSION-$GENFIT_REVISION} \\
             ${FEDRA_VERSION:+FEDRA/$FEDRA_VERSION-$FEDRA_REVISION}
   # Our environment
   setenv EOSSHIP root://eospublic.cern.ch/
@@ -74,7 +74,6 @@ incremental_recipe: |
   append-path ROOT_INCLUDE_PATH \$::env(PYTHIA_ROOT)/include/Pythia8
   append-path ROOT_INCLUDE_PATH \$::env(GEANT4_VMC_ROOT)/include
   append-path ROOT_INCLUDE_PATH \$::env(GEANT4_VMC_ROOT)/include/geant4vmc
-  append-path ROOT_INCLUDE_PATH \$::env(SNDSW_ROOT)/genfit/core/include
   append-path PYTHONPATH        \$::env(XROOTD_ROOT)/lib/python/site-packages
   # required for ubuntu22.04: don't know how to fix this more elegant
   append-path PYTHONPATH        \$::env(XROOTD_ROOT)/local/lib/python3.10/dist-packages
@@ -175,6 +174,7 @@ module load BASE/1.0                                                            
             ${FAIRROOT_VERSION:+FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION}	\\
             ${MADGRAPH5_VERSION:+madgraph5/$MADGRAPH5_VERSION-$MADGRAPH5_REVISION} \\
             ${ALPACA_VERSION:+alpaca/$ALPACA_VERSION-$ALPACA_REVISION}          \\
+            ${GENFIT_VERSION:+GenFit/$GENFIT_VERSION-$GENFIT_REVISION} \\
             ${FEDRA_VERSION:+FEDRA/$FEDRA_VERSION-$FEDRA_REVISION}
 # Our environment
 setenv EOSSHIP root://eospublic.cern.ch/
