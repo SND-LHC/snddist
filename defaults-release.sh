@@ -11,6 +11,7 @@ disable:
   - AliEn-CAs
   - ApMon-CPP
   - DDS
+  - FEDRA
 overrides:
   autotools:
     tag: v1.6.3
