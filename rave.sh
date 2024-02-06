@@ -1,5 +1,5 @@
 package: RAVE
-version: 48873e5ec3e531183cbb64dd8bf4b31bbb7c24dd
+version: 759234fdf470c24e4964c3654213d7b4d5f36976
 source: https://github.com/olantwin/rave
 requires:
   - boost

@@ -1,5 +1,5 @@
 package: GenFit
-version: main
+version: 12c8e05d41c6bd4d54a638da2248816079edba27
 source: https://github.com/olantwin/GenFit
 requires:
   - ROOT
