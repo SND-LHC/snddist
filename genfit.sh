@@ -25,6 +25,7 @@ cmake $SOURCEDIR                                                                
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                    \
       -DCMAKE_INSTALL_LIBDIR=lib                                                            \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+      -DRave_DIR="${RAVEPATH}" \
       -DROOT_DIR="${ROOT_ROOT}"
 
 cmake --build . -- -j$JOBS install
@@ -34,9 +35,23 @@ MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 
-alibuild-generate-module --lib > $MODULEFILE
 
 cat >> "$MODULEFILE" <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+  global version
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+}
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Dependencies
+if ![ is-loaded 'BASE/1.0' ] {
+ module load BASE/1.0
+}
+if ![ is-loaded "RAVE/$RAVE_VERSION-$RAVE_REVISION" ] { module load "RAVE/$RAVE_VERSION-$RAVE_REVISION"}
+
+set PKG_ROOT $::env(BASEDIR)/GenFit/\$version
+
 # Our environment
 set GENFIT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv GENFIT \$GENFIT_ROOT
