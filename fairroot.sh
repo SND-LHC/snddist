@@ -1,5 +1,5 @@
 package: FairRoot
-version: "v18.4.9"
+version: "v18.4_patches"
 source: https://github.com/FairRootGroup/FairRoot
 requires:
   - generators

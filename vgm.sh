@@ -1,7 +1,7 @@
 package: vgm
 version: "%(tag_basename)s"
-tag: "v5-0-snd"
-source: https://github.com/SND-LHC/vgm
+tag: "v5-2"
+source: https://github.com/vmc-project/vgm
 requires:
   - ROOT
   - GEANT4
@@ -9,10 +9,12 @@ build_requires:
   - CMake
 ---
 #!/bin/bash -e
+
 cmake "$SOURCEDIR" \
   -DCMAKE_CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
   -DCMAKE_INSTALL_LIBDIR="lib"                 \
   -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"        \
+  -DCMAKE_POLICY_DEFAULT_CMP0074=NEW \
   ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}
 
 make ${JOBS+-j $JOBS} install

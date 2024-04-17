@@ -36,25 +36,6 @@ overrides:
       ls $XROOTD_ROOT/lib > /dev/null && \
       ls $FAIRROOT_ROOT/include > /dev/null 
   ROOT:
-    tag: "v6-28-04"
-    source: https://github.com/root-project/root
-    requires:
-      - GSL
-      - opengl:(?!osx)
-      - Xdevel:(?!osx)
-      - FreeType:(?!osx)
-      - Python-modules
-      - zlib
-      - libxml2
-      - "OpenSSL:(?!osx)"
-      - "osx-system-openssl:(osx.*)"
-      - XRootD
-      - pythia
-      - pythia6
-    build_requires:
-      - CMake
-      - "Xcode:(osx.*)"
-      - libxml2
     prefer_system_check: |
       ls $ROOT_ROOT/bin > /dev/null && \
       ls $ROOT_ROOT/cmake > /dev/null && \
@@ -86,16 +67,12 @@ overrides:
       verge() { [[  "$1" = "`echo -e "$1\n$2" | sort -V | head -n1`" ]]; }
       type cmake && verge 3.23.1 `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3`
   FairRoot:
-    version: "%(tag_basename)s"
-    tag: "v18.4.9"
     prefer_system_check: |
       ls $FAIRROOT_ROOT/ > /dev/null && \
       ls $FAIRROOT_ROOT/lib > /dev/null && \
       ls $FAIRROOT_ROOT/include > /dev/null && \
       grep v18.4.9 $FAIRROOT_ROOT/include/FairVersion.h
   FairMQ:
-    version: "%(tag_basename)s"
-    tag: "v1.4.55"
     prefer_system_check: |
       ls $FAIRMQ_ROOT/ > /dev/null && \
       ls $FAIRMQ_ROOT/lib > /dev/null && \
@@ -152,8 +129,6 @@ overrides:
       ls $GEANT4_VMC_ROOT/include/geant4vmc > /dev/null && \
       true
   VMC:
-    version: "%(tag_basename)s"
-    tag: v2-0
     prefer_system_check: |
       ls $VMC_ROOT/include > /dev/null && \
       true
@@ -204,10 +179,6 @@ overrides:
       ls $PYTHIA_ROOT/lib/libpythia8lhapdf6.so > /dev/null && \
       ls $PYTHIA_ROOT/lib/libpythia8.so > /dev/null && \
       true
-  vgm:
-    version: "%(tag_basename)s"
-    tag: "v5-0-snd"
-    source: https://github.com/SND-LHC/vgm
   evtGen:
     version: "%(tag_basename)s"
     source: https://github.com/ShipSoft/evtgen
