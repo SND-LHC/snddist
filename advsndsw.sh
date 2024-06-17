@@ -90,9 +90,22 @@ MODULEDIR="$BUILDDIR/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 
-alibuild-generate-module --bin --lib > $MODULEFILE
-
 cat >> "$MODULEFILE" <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+global version
+puts stderr "SND\@LHC Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+}
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "SND\@LHC Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Dependencies
+module load BASE/1.0 \\
+    ${XROOTD_VERSION:+XRootD/$XROOTD_VERSION-$XROOTD_REVISION} \\
+    ${GEANT4_VERSION:+GEANT4/$GEANT4_VERSION-$GEANT4_REVISION} \\
+    ${GENIE_VERSION:+GENIE/$GENIE_VERSION-$GENIE_REVISION} \\
+    ${PHOTOSPP_VERSION:+PHOTOSPP/$PHOTOSPP_VERSION-$PHOTOSPP_REVISION} \\
+    ${EVTGEN_VERSION:+EvtGen/$EVTGEN_VERSION-$EVTGEN_REVISION} \\
+    ${FAIRROOT_VERSION:+FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION}
 # Our environment
 setenv EOSSND root://eospublic.cern.ch/
 setenv ADVSNDSW_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
