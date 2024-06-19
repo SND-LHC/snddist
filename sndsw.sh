@@ -14,8 +14,8 @@ requires:
   - ROOT
   - VMC
   - alpaca
-  - FEDRA
   - XRootD
+  - GenFit
 incremental_recipe: |
   rsync -ar $SOURCEDIR/ $INSTALLROOT/
   make ${JOBS:+-j$JOBS}
@@ -24,7 +24,6 @@ incremental_recipe: |
   rsync -a $BUILDDIR/bin $INSTALLROOT/
   # to be sure all header files are there
   rsync -a $INSTALLROOT/*/*.h $INSTALLROOT/include
-  rsync -a $INSTALLROOT/genfit/core/include/*.h $INSTALLROOT/include
   #Get the current git hash
   cd $SOURCEDIR
   SNDSW_HASH=$(git rev-parse HEAD)
@@ -51,7 +50,7 @@ incremental_recipe: |
             ${FAIRROOT_VERSION:+FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION}  \\
             ${MADGRAPH5_VERSION:+madgraph5/$MADGRAPH5_VERSION-$MADGRAPH5_REVISION} \\
             ${ALPACA_VERSION:+alpaca/$ALPACA_VERSION-$ALPACA_REVISION}          \\
-            ${FEDRA_VERSION:+FEDRA/$FEDRA_VERSION-$FEDRA_REVISION}
+            ${GENFIT_VERSION:+GenFit/$GENFIT_VERSION-$GENFIT_REVISION}
   # Our environment
   setenv EOSSHIP root://eospublic.cern.ch/
   setenv SNDSW_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
@@ -73,16 +72,9 @@ incremental_recipe: |
   append-path ROOT_INCLUDE_PATH \$::env(PYTHIA_ROOT)/include/Pythia8
   append-path ROOT_INCLUDE_PATH \$::env(GEANT4_VMC_ROOT)/include
   append-path ROOT_INCLUDE_PATH \$::env(GEANT4_VMC_ROOT)/include/geant4vmc
-  append-path ROOT_INCLUDE_PATH \$::env(SNDSW_ROOT)/genfit/core/include
   append-path PYTHONPATH        \$::env(XROOTD_ROOT)/lib/python/site-packages
   # required for ubuntu22.04: don't know how to fix this more elegant
   append-path PYTHONPATH        \$::env(XROOTD_ROOT)/local/lib/python3.10/dist-packages
-
-  append-path ROOT_INCLUDE_PATH \$::env(FEDRA_ROOT)/include
-  append-path ROOT_INCLUDE_PATH \$::env(FEDRA_ROOT)/include/smatrix
-  append-path ROOT_INCLUDE_PATH \$::env(FEDRA_ROOT)/include/vt++
-  append-path ROOT_INCLUDE_PATH \$::env(FEDRA_ROOT)/include/dataIO
-  append-path PYTHONPATH \$::env(FEDRA_ROOT)/python
 
   prepend-path PYTHONPATH \$::env(SNDSW_ROOT)/python
   append-path PYTHONPATH \$::env(SNDSW_ROOT)/shipLHC/scripts
@@ -137,6 +129,7 @@ cmake $SOURCEDIR                                                 \
       -DGEANT4_VMC_INCLUDE_DIR=$GEANT4_VMC_ROOT/include/geant4vmc \
       ${CMAKE_VERBOSE_MAKEFILE:+-DCMAKE_VERBOSE_MAKEFILE=ON}     \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                    \
+      ${GENFIT:+-Dgenfit2_ROOT=$GENFIT} \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 make ${JOBS:+-j$JOBS}
 make test
@@ -145,7 +138,6 @@ make install
 rsync -a $BUILDDIR/bin $INSTALLROOT/
 # to be sure all header files are there
 rsync -a $INSTALLROOT/*/*.h $INSTALLROOT/include
-rsync -a $INSTALLROOT/genfit/core/include/*.h $INSTALLROOT/include
 
 #Get the current git hash
 cd $SOURCEDIR
@@ -174,7 +166,7 @@ module load BASE/1.0                                                            
             ${FAIRROOT_VERSION:+FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION}	\\
             ${MADGRAPH5_VERSION:+madgraph5/$MADGRAPH5_VERSION-$MADGRAPH5_REVISION} \\
             ${ALPACA_VERSION:+alpaca/$ALPACA_VERSION-$ALPACA_REVISION}          \\
-            ${FEDRA_VERSION:+FEDRA/$FEDRA_VERSION-$FEDRA_REVISION}
+            ${GENFIT_VERSION:+GenFit/$GENFIT_VERSION-$GENFIT_REVISION}
 # Our environment
 setenv EOSSHIP root://eospublic.cern.ch/
 setenv SNDSW_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
@@ -202,12 +194,6 @@ append-path PYTHONPATH \$::env(SNDSW_ROOT)/shipLHC/rawData
 append-path PYTHONPATH \$::env(XROOTD_ROOT)/lib/python/site-packages
 # required for ubuntu22.04: don't know how to fix this more elegant
 append-path PYTHONPATH  \$::env(XROOTD_ROOT)/local/lib/python3.10/dist-packages
-
-append-path ROOT_INCLUDE_PATH \$::env(FEDRA_ROOT)/include
-append-path ROOT_INCLUDE_PATH \$::env(FEDRA_ROOT)/include/smatrix
-append-path ROOT_INCLUDE_PATH \$::env(FEDRA_ROOT)/include/vt++
-append-path ROOT_INCLUDE_PATH \$::env(FEDRA_ROOT)/include/dataIO
-append-path PYTHONPATH \$::env(FEDRA_ROOT)/python
 
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(SNDSW_ROOT)/lib")
 EoF
