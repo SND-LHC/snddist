@@ -24,7 +24,7 @@ incremental_recipe: |
   #Get the current git hash and update modulefile
   cd $SOURCEDIR
   ADVSNDSW_HASH=$(git rev-parse HEAD)
-  sed -i -e "s/ADVSNDSW_HASH .*/ADVSNDSW_HASH $ADVSNDSW_HASH/" "$INSTALLROOT/etc/modulefiles/sndsw"
+  sed -i -e "s/ADVSNDSW_HASH .*/ADVSNDSW_HASH $ADVSNDSW_HASH/" "$INSTALLROOT/etc/modulefiles/advsndsw"
 ---
 #!/bin/sh
 
