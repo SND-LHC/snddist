@@ -1,20 +1,20 @@
 package: Tauolapp
-version: "%(tag_basename)s-ship%(defaults_upper)s"
-source: https://github.com/ShipSoft/Tauolapp
-tag: v1.1.5
+version: "%(tag_basename)s"
+source: https://github.com/SND-LHC/TAUOLA
+tag: v1.1.8
 requires:
   - HepMC
+  - HepMC3
   - ROOT
   - pythia
   - lhapdf
 ---
 #!/bin/sh
 
-export  HEPMCLOCATION="$HEPMC_ROOT"
-
 rsync -a $SOURCEDIR/* .
 
-./configure --with-hepmc=$HEPMC_ROOT --with-lhapdf=$LHAPDF_ROOT --with-pythia8=$PYTHIA_ROOT --prefix=$INSTALLROOT CFLAGS="$CFLAGS" CXXFLAGS="$CFLAGS"
+autoreconf -ifv
+./configure --with-hepmc3=$HEPMC3_ROOT --with-hepmc=$HEPMC_ROOT --with-lhapdf=$LHAPDF_ROOT --with-pythia8=$PYTHIA_ROOT --prefix=$INSTALLROOT CFLAGS="$CFLAGS" CXXFLAGS="$CFLAGS"
 
 make 
 make install
