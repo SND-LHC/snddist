@@ -52,6 +52,12 @@ case $PKGVERSION in
   ;;
 esac
 
+# We do not use global options for ROOT, otherwise the -g will
+# kill compilation on < 8GB machines
+unset CXXFLAGS
+unset CFLAGS
+unset LDFLAGS
+
 case $ARCHITECTURE in
   osx*)
     ENABLE_COCOA=1
