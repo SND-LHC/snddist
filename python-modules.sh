@@ -71,15 +71,15 @@ for X in "mock==1.3.0"          \
          "metakernel==0.24.2"   \
          "scipy==1.6.1"         \
          "scikit-learn==0.24.1" \
-         "matplotlib==3.5.1"    \
+         "matplotlib==3.8.3"    \
          "six"                  \
          "future"               \
          "pymongo==3.10.1"      \
          "pytest==4.6.9"        \
          "pylint==2.0.1"        \
          "PyYAML==5.1"          \
-         "psutil==5.9.4"       \
-         "requests==2.25.0"     \
+         "psutil==5.9.4"        \
+         "requests==2.27.1"     \
          "mongoengine==0.23.1"
 do
   python3 -m pip install --user $X
