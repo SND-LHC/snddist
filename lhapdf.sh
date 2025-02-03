@@ -38,6 +38,12 @@ for P in $PDFSETS; do
   curl -L https://lhapdfsets.web.cern.ch/lhapdfsets/current/"$P".tar.gz | tar xz -C "$INSTALLROOT"/share/LHAPDF
   ls "$INSTALLROOT"/share/LHAPDF/"$P"
 done
+#small-x PDFs
+PDFSETS_SMALLX="NNPDF31sx_nlonllx_as_0118_LHCb"
+for P in $PDFSETS_SMALLX; do
+  curl -L https://data.nnpdf.science/BGR18/"$P".tgz | tar xz -C "$INSTALLROOT"/share/LHAPDF
+  ls "$INSTALLROOT"/share/LHAPDF/"$P"
+done
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -55,6 +61,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Our environment
 setenv LHAPDF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv LHAPATH \$::env(LHAPDF_ROOT)/share/LHAPDF
+setenv LHAPDF_DATA_DIR \$::env(LHAPATH)
 prepend-path PATH $::env(LHAPDF_ROOT)/bin
 prepend-path LD_LIBRARY_PATH $::env(LHAPDF_ROOT)/lib
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH $::env(LHAPDF_ROOT)/lib")
