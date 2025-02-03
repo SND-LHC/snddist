@@ -234,10 +234,14 @@ overrides:
       ls $PHOTOSPP_ROOT/lib/libPhotosppHepMC.so.1.0.0 > /dev/null && \
       ls $PHOTOSPP_ROOT/lib/libPhotospp.so > /dev/null && \
       true
+  POWHEG:
+    version: "%(tag_basename)s"
+    source: https://github.com/SND-LHC/POWHEG
+    tag: "r4110-forward-snd"
   Tauolapp:
     version: "%(tag_basename)s"
-    source: https://github.com/ShipSoft/Tauolapp
-    tag: v1.1.5-ship
+    source: https://github.com/SND-LHC/TAUOLA
+    tag: v1.1.8
   pythia6:
     version: "%(tag_basename)s"
     source: https://github.com/SND-LHC/pythia6
