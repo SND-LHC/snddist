@@ -10,10 +10,10 @@ prepend_path:
   PYTHONPATH: $PYTHON_MODULES_ROOT/lib/python$PYVSN/site-packages:$PYTHONPATH
 prefer_system: (?!slc5)
 prefer_system_check: |
-  python3 -c 'import wheel, matplotlib,numpy,scipy,certifi,IPython,ipywidgets,ipykernel,notebook.notebookapp,metakernel,sklearn,six,pymongo,mongoengine,pytest,pylint,yaml'
+  python3 -c 'import wheel, matplotlib,numpy,scipy,certifi,IPython,ipywidgets,ipykernel,notebook.notebookapp,metakernel,sklearn,six,pymongo,mongoengine,pytest,pylint,yaml,pandas'
   if [ $? -ne 0 ]
   then
-      printf "Required Python modules are missing. You can install them with pip3:\n  pip3 install matplotlib numpy scipy certifi ipython ipywidgets ipykernel notebook metakernel scikit-learn six pymongo mongoengine pytest pylint pyyaml\n"
+      printf "Required Python modules are missing. You can install them with pip3:\n  pip3 install matplotlib numpy scipy certifi ipython ipywidgets ipykernel notebook metakernel scikit-learn six pymongo mongoengine pytest pylint pyyaml pandas\n"
       exit 1
   fi
 ---
@@ -43,6 +43,7 @@ If you want to avoid this please install the following modules (pip recommended)
   - pylint
   - pyyaml
   - psutil
+  - pandas
 EoF
 fi
 
@@ -80,7 +81,8 @@ for X in "mock==1.3.0"          \
          "PyYAML==5.1"          \
          "psutil==5.9.4"        \
          "requests==2.27.1"     \
-         "mongoengine==0.23.1"
+         "mongoengine==0.23.1"  \
+	 "pandas"
 do
   python3 -m pip install --user $X
 done
@@ -106,7 +108,7 @@ grep -IlRE '#!.*python' $INSTALLROOT/bin | \
 # Test whether we can load Python modules (this is not obvious as some of them
 # do not indicate some of their dependencies and break at runtime).
 PYTHONPATH=$INSTALLROOT/lib64/python$PYVER/site-packages:$INSTALLROOT/lib/python$PYVER/site-packages:$PYTHONPATH \
-  python3 -c 'import matplotlib,numpy,scipy,certifi,IPython,ipywidgets,ipykernel,notebook.notebookapp,metakernel,sklearn,six,pymongo,mongoengine,pytest,pylint'
+  python3 -c 'import matplotlib,numpy,scipy,certifi,IPython,ipywidgets,ipykernel,notebook.notebookapp,metakernel,sklearn,six,pymongo,mongoengine,pytest,pylint,pandas'
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
