@@ -15,6 +15,7 @@ requires:
   - VMC
   - alpaca
   - XRootD
+  - POWHEG
 incremental_recipe: |
   rsync -ar $SOURCEDIR/ $INSTALLROOT/
   make ${JOBS:+-j$JOBS}

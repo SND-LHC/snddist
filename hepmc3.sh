@@ -1,7 +1,7 @@
 package: HepMC3
 version: "%(tag_basename)s"
 source: https://gitlab.cern.ch/hepmc/HepMC3.git
-tag: beta2.0
+tag: 3.3.0
 requires:
   - ROOT
 build_requires:
@@ -12,7 +12,9 @@ build_requires:
 
 cmake  $SOURCEDIR                           \
        -DCMAKE_INSTALL_PREFIX=$INSTALLROOT  \
-       -DROOT_DIR=$ROOT_ROOT
+       -DROOT_DIR=$ROOT_ROOT                \
+       -DCMAKE_INSTALL_LIBDIR=lib           \
+       -DHEPMC3_ENABLE_PYTHON=OFF
 
 make ${JOBS+-j $JOBS}
 make install
@@ -35,5 +37,6 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-
 setenv HEPMC3_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(HEPMC3_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(HEPMC3_ROOT)/lib
+prepend-path ROOT_INCLUDE_PATH \$::env(HEPMC3_ROOT)/include
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(HEPMC3_ROOT)/lib")
 EoF

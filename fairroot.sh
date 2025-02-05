@@ -1,5 +1,5 @@
 package: FairRoot
-version: "v18.4.9"
+version: "v19.0.0"
 source: https://github.com/FairRootGroup/FairRoot
 requires:
   - generators
@@ -9,6 +9,7 @@ requires:
   - boost
   - protobuf
   - FairLogger
+  - FairCMakeModules
   - FairMQ
   - "GCC-Toolchain:(?!osx)"
 env:
