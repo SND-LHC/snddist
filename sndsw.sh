@@ -14,7 +14,6 @@ requires:
   - ROOT
   - VMC
   - alpaca
-  - FEDRA
   - XRootD
 incremental_recipe: |
   rsync -ar $SOURCEDIR/ $INSTALLROOT/
