@@ -70,8 +70,8 @@ for X in "mock==1.3.0"          \
          "ipykernel==4.10.0"    \
          "notebook==4.4.1"      \
          "metakernel==0.24.2"   \
-         "scipy==1.6.1"         \
-         "scikit-learn==0.24.1" \
+         "scipy==1.9.3"         \
+         "scikit-learn>=0.24.1" \
          "matplotlib==3.8.3"    \
          "six"                  \
          "future"               \
