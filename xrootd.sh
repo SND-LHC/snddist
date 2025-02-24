@@ -135,7 +135,7 @@ then
     # Print found XRootD python bindings
     # just run the the command as this is under "bash -e"
     echo -ne ">>>>>>   Found XRootD python bindings: "
-    LD_LIBRARY_PATH="$INSTALLROOT/lib${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH" PYTHONPATH="$INSTALLROOT/lib/python/site-packages${PYTHONPATH:+:}$PYTHONPATH" ${PYTHON_EXECUTABLE} -c 'from XRootD import client as xrd_client;print(f"{xrd_client.__version__}\n{xrd_client.__file__}");'
+    LD_LIBRARY_PATH="$INSTALLROOT/lib${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH" PYTHONPATH="$INSTALLROOT/lib/python/dist-packages${PYTHONPATH:+:}$PYTHONPATH" ${PYTHON_EXECUTABLE} -c 'from XRootD import client as xrd_client;print(f"{xrd_client.__version__}\n{xrd_client.__file__}");'
     echo
 
 fi  # end of PYTHON part
@@ -158,7 +158,7 @@ module-whatis "SND\@LHC Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHA
 # Our environment
 setenv XROOTD_ROOT \$PKG_ROOT
 if { $XROOTD_PYTHON } {
-  prepend-path PYTHONPATH \$PKG_ROOT/lib/python/site-packages
+  prepend-path PYTHONPATH \$PKG_ROOT/lib/python/dist-packages
   # This is probably redundant, but should not harm.
   module load ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                                 \\
               ${PYTHON_MODULES_REVISION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION}
