@@ -51,7 +51,7 @@ cmake $SOURCEDIR                                                                
       -DGeant3_DIR=$GEANT3_ROOT                                                             \
       -DBUILD_MBS=OFF                                                                       \
       -DDISABLE_GO=ON                                                                       \
-      -DBUILD_EXAMPLES=ON                                                                   \
+      -DBUILD_EXAMPLES=OFF                                                                  \
       ${GEANT4_ROOT:+-DGeant4_DIR=$GEANT4_ROOT}                                             \
       -DFAIRROOT_MODULAR_BUILD=ON                                                           \
       ${DDS_ROOT:+-DDDS_PATH=$DDS_ROOT}                                                     \
