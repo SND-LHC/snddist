@@ -36,25 +36,6 @@ overrides:
       ls $XROOTD_ROOT/lib > /dev/null && \
       ls $FAIRROOT_ROOT/include > /dev/null 
   ROOT:
-    tag: "v6-28-12"
-    source: https://github.com/root-project/root
-    requires:
-      - GSL
-      - opengl:(?!osx)
-      - Xdevel:(?!osx)
-      - FreeType:(?!osx)
-      - Python-modules
-      - zlib
-      - libxml2
-      - "OpenSSL:(?!osx)"
-      - "osx-system-openssl:(osx.*)"
-      - XRootD
-      - pythia
-      - pythia6
-    build_requires:
-      - CMake
-      - "Xcode:(osx.*)"
-      - libxml2
     prefer_system_check: |
       ls $ROOT_ROOT/bin > /dev/null && \
       ls $ROOT_ROOT/cmake > /dev/null && \
