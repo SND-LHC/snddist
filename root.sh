@@ -1,6 +1,6 @@
 package: ROOT
-version: "%(tag_basename)s%(defaults_upper)s"
-tag: v5-34-30-alice7
+version: "%(tag_basename)s"
+tag: v6-36-04-alice1
 source: https://github.com/alisw/root
 requires:
   - GSL
@@ -10,6 +10,13 @@ requires:
   - "MySQL:slc7.*"
   - GCC-Toolchain:(?!osx)
   - libxml2
+  - zlib
+  - libpng
+  - protobuf
+  - FFTW3
+  - XRootD
+  - pythia
+  - pythia6
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -40,6 +47,8 @@ case $PKGVERSION in
     [[ "$CXXFLAGS" == *'-std=c++11'* ]] && CXX11=1 || true
     [[ "$CXXFLAGS" == *'-std=c++14'* ]] && CXX14=1 || true
     [[ "$CXXFLAGS" == *'-std=c++17'* ]] && CXX17=1 || true
+    [[ "$CXXFLAGS" == *'-std=c++20'* ]] && CMAKE_CXX_STANDARD=20 || true
+    [[ "$CXXFLAGS" == *'-std=c++23'* ]] && CMAKE_CXX_STANDARD=23 || true
   ;;
 esac
 
@@ -66,6 +75,12 @@ then
     PYHIA6_LATE=TRUE
 fi
 
+case $PKG_VERSION in
+  v6[-.]2[0-9]*) EXTRA_CMAKE_OPTIONS="-Dminuit2=ON -Dpythia6=ON -Dpythia6_nolink=ON" ;;
+  v6[-.]36[-.][0-9]*) EXTRA_CMAKE_OPTIONS="-Dminuit=ON -Dpythia6=ON -Dpythia6_nolink=ON -Dproof=ON -Dgeombuilder=ON" ;;
+  *) EXTRA_CMAKE_OPTIONS="-Dminuit=ON" ;;
+esac
+
 # Normal ROOT build.
 cmake $SOURCEDIR                                                  \
         -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                      \
@@ -76,22 +91,30 @@ cmake $SOURCEDIR                                                  \
         -Dbuiltin_freetype=OFF                                    \
         -Dpcre=OFF                                                \
         -Dbuiltin_pcre=ON                                         \
+        -Dsqlite=OFF                                              \
         -Drpath=ON                                                \
         ${ENABLE_COCOA:+-Dcocoa=ON}                               \
+        ${EXTRA_CMAKE_OPTIONS}                                    \
         -DCMAKE_CXX_COMPILER=$COMPILER_CXX                        \
         -DCMAKE_C_COMPILER=$COMPILER_CC                           \
         -DCMAKE_LINKER=$COMPILER_LD                               \
         ${GCC_TOOLCHAIN_VERSION:+-DCMAKE_EXE_LINKER_FLAGS="-L$GCC_TOOLCHAIN_ROOT/lib64"} \
         ${SYS_OPENSSL_ROOT:+-DOPENSSL_ROOT=$SYS_OPENSSL_ROOT}     \
-        ${SYS_OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIR=$SYS_OPENSSL_ROOT/include}  \
+        ${SYS_OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIR=$SYS_OPENSSL_ROOT/include} \
         ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                          \
-	${PYTHIA_ROOT:+-DPYTHIA8_DIR=$PYTHIA_ROOT}                \
-	${PYTHIA6_ROOT:+-DPYTHIA6_LIBRARY=$PYTHIA6_ROOT/lib/libpythia6.so}\
-	${PYTHIA6_ROOT:+-Dpythia6=ON}                             \
-        -Dpgsql=OFF                                               \
-        -Dminuit2=ON                                              \
-        -Dgdml=ON                                                 \
+        ${LIBPNG_ROOT:+-DPNG_INCLUDE_DIRS="${LIBPNG_ROOT}/include"} \
+        ${LIBPNG_ROOT:+-DPNG_LIBRARY="${LIBPNG_ROOT}/lib/libpng.${SONAME}"} \
+        ${PROTOBUF_REVISION:+-DProtobuf_DIR=${PROTOBUF_ROOT}}     \
+        ${ZLIB_ROOT:+-DZLIB_ROOT=${ZLIB_ROOT}}                    \
+        ${FFTW3_ROOT:+-DFFTW_DIR=${FFTW3_ROOT}}                   \
+        -Dfftw3=ON                                                \
+	-Dbuiltin_fftw3=OFF                                       \
+        ${PYTHIA_ROOT:+-DPYTHIA8_DIR=$PYTHIA_ROOT}                \
+	${PYTHIA_ROOT:+-Dpythia8=ON}                              \
 	${PYTHIA6_LATE:+-Dpythia6_nolink=ON}                      \
+        -Dpgsql=OFF                                               \
+        -Dgdml=ON                                                 \
+        -Dmathmore=ON                                             \
         -Droofit=ON                                               \
         -Dhttp=ON                                                 \
         -Dsoversion=ON                                            \
@@ -101,8 +124,9 @@ cmake $SOURCEDIR                                                  \
         ${PYTHON_ROOT:+-DPYTHON_EXECUTABLE=$PYTHONHOME/bin/python} \
         ${PYTHON_ROOT:+-DPYTHON_INCLUDE_DIR=$PYTHONHOME/include/python3.6m} \
         ${PYTHON_ROOT:+-DPYTHON_LIBRARY=$PYTHONHOME/lib/libpython3.6m.so} \
-        -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT"
-FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http gdml ${PYTHIA_ROOT:+pythia8}
+        -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT,\
+                             $FFTW_ROOT"
+FEATURES="builtin_pcre mathmore xml ssl opengl http gdml fftw3 ${PYTHIA_ROOT:+pythia8}
             pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${XROOTD_ROOT:+xrootd}
             ${ENABLE_COCOA:+builtin_freetype}"
 NO_FEATURES="${FREETYPE_ROOT:+builtin_freetype}"
