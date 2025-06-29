@@ -1,7 +1,7 @@
 package: GSL
-version: "v1.16%(defaults_upper)s"
+version: "v2.8"
 source: https://github.com/alisw/gsl
-tag: "release-1-16"
+tag: "v2.8"
 build_requires:
   - autotools
 requires:
