@@ -20,14 +20,6 @@ env:
 prepend_path:
   PYTHONPATH: "$ROOTSYS/lib"
 incremental_recipe: |
-  if [[ $ALICE_DAQ ]]; then
-    export ROOTSYS=$BUILDDIR && make ${JOBS+-j$JOBS} && make static
-    for S in montecarlo/vmc tree/treeplayer io/xmlparser math/minuit2 sql/mysql; do
-      mkdir -p $INSTALLROOT/$S/src
-      cp -v $S/src/*.o $INSTALLROOT/$S/src/
-    done
-    export ROOTSYS=$INSTALLROOT
-  fi
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
   cd $INSTALLROOT/test
@@ -75,33 +67,8 @@ then
     PYHIA6_LATE=TRUE
 fi
 
-if [[ $ALICE_DAQ ]]; then
-  # DAQ requires static ROOT, only supported by ./configure (not CMake).
-  export ROOTSYS=$BUILDDIR
-  $SOURCEDIR/configure                  \
-    --with-pythia6-uscore=SINGLE        \
-    --enable-minuit2                    \
-    --enable-roofit                     \
-    --enable-soversion                  \
-    --enable-builtin-freetype           \
-    --enable-builtin-pcre               \
-    --enable-mathmore                   \
-    --with-f77=gfortran                 \
-    --with-cc=$COMPILER_CC              \
-    --with-cxx=$COMPILER_CXX            \
-    --with-ld=$COMPILER_LD              \
-    ${CXXFLAGS:+--cxxflags="$CXXFLAGS"} \
-    --disable-shadowpw                  \
-    --disable-astiff                    \
-    --disable-globus                    \
-    --disable-krb5                      \
-    --disable-ssl                       \
-    --enable-mysql
-  FEATURES="builtin_freetype builtin_pcre mathmore minuit2 pythia6 roofit
-            soversion ${CXX11:+cxx11} ${CXX14:+cxx14} mysql xml"
-else
-  # Normal ROOT build.
-  cmake $SOURCEDIR                                                \
+# Normal ROOT build.
+cmake $SOURCEDIR                                                  \
         -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                      \
         -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                       \
         ${ALIEN_RUNTIME_ROOT:+-Dalien=ON}                         \
@@ -142,12 +109,11 @@ else
         ${PYTHON_ROOT:+-DPYTHON_INCLUDE_DIR=$PYTHONHOME/include/python3.6m} \
         ${PYTHON_ROOT:+-DPYTHON_LIBRARY=$PYTHONHOME/lib/libpython3.6m.so} \
         -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT"
-  FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http gdml ${PYTHIA_ROOT:+pythia8}
+FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http gdml ${PYTHIA_ROOT:+pythia8}
             pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${XROOTD_ROOT:+xrootd}
             ${ALIEN_RUNTIME_ROOT:+alien monalisa}
             ${ENABLE_COCOA:+builtin_freetype}"
-  NO_FEATURES="${FREETYPE_ROOT:+builtin_freetype}"
-fi
+NO_FEATURES="${FREETYPE_ROOT:+builtin_freetype}"
 
 # Check if all required features are enabled
 bin/root-config --features
@@ -158,17 +124,6 @@ for FEATURE in $NO_FEATURES; do
   bin/root-config --has-$FEATURE | grep -q no
 done
 
-if [[ $ALICE_DAQ ]]; then
-  make ${JOBS+-j$JOBS}
-  make static
-  # *.o files from these modules need to be copied to the install directory
-  # because AliRoot static build uses them directly
-  for S in montecarlo/vmc tree/treeplayer io/xmlparser math/minuit2 sql/mysql; do
-    mkdir -p $INSTALLROOT/$S/src
-    cp -v $S/src/*.o $INSTALLROOT/$S/src/
-  done
-  export ROOTSYS=$INSTALLROOT
-fi
 make ${JOBS+-j$JOBS} install
 [[ -d $INSTALLROOT/test ]] && ( cd $INSTALLROOT/test && env PATH=$INSTALLROOT/bin:$PATH LD_LIBRARY_PATH=$INSTALLROOT/lib:$LD_LIBRARY_PATH DYLD_LIBRARY_PATH=$INSTALLROOT/lib:$DYLD_LIBRARY_PATH make ${JOBS+-j$JOBS} )
 
