@@ -18,6 +18,23 @@ There could be several types of changes:
 For now we start with the changes introduced with the 2025/Jan30. 
 Shall there be a strong will/need, one can go back and create&fill in the logs for previous stacks.
 
+## 2025/Oct7
+
+### Added
+
+- FFTW3 package in ROOT
+- colorlog for python scripts
+
+### Changed
+
+- Bump to ROOT v6.36.04!
+- Bump GSL v2.8
+
+### Removed
+
+- ROOT recipe: support for ALICE_DAQ and ALICE env
+- gcc-toolchain recipe: the sim folder which conflicts with FairRoot
+
 ## 2025/Jan30
 
 ### Added
